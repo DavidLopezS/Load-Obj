@@ -1,24 +1,28 @@
 #include <GL\glew.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <vector>
 #include <glm\gtc\type_ptr.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 #include <cstdio>
 #include <cassert>
 
 #include "GL_framework.h"
+#include <vector>
 
-extern bool loadOBJ(const char * path,
-	std::vector < glm::vec3 > &
-	out_vertices,
-	std::vector < glm::vec2 > & out_uvs,
-	std::vector < glm::vec3 > & out_normals
-);
+
+//variables to load an object:
 
 std::vector< glm::vec3 > vertices;
 std::vector< glm::vec2 > uvs;
 std::vector< glm::vec3 > normals;
+
+
+
+extern bool loadOBJ(const char * path,
+	std::vector < glm::vec3 > & out_vertices,
+	std::vector < glm::vec2 > & out_uvs,
+	std::vector < glm::vec3 > & out_normals
+);
+
+
 
 
 ///////// fw decl
@@ -116,20 +120,26 @@ void GLinit(int width, int height) {
 
 	// Setup shaders & geometry
 	/*Box::setupCube();
-	Axis::setupAxis();
-	Cube::setupCube();*/
+	Axis::setupAxis();*/
 
-	bool res = loadOBJ("cube.obj",
-		vertices, uvs, normals);
+	bool res = loadOBJ("cube.obj", vertices, uvs, normals);
+
+	Cube::setupCube();
+
+
+
+
+
+
 
 
 }
 
 void GLcleanup() {
 	/*Box::cleanupCube();
-	Axis::cleanupAxis();
+	Axis::cleanupAxis();*/
 	Cube::cleanupCube();
-*/
+
 
 
 }
@@ -146,10 +156,10 @@ void GLrender(double currentTime) {
 
 	// render code
 	/*Box::drawCube();
-	Axis::drawAxis();
-	Cube::drawCube();*/
+	Axis::drawAxis();*/
+	Cube::drawCube();
 
-
+	
 
 	ImGui::Render();
 }
@@ -943,18 +953,20 @@ void main() {\n\
 		glGenBuffers(3, cubeVbo);
 
 		glBindBuffer(GL_ARRAY_BUFFER, cubeVbo[0]);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVerts), cubeVerts, GL_STATIC_DRAW);
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVerts), cubeVerts, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 		glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		glEnableVertexAttribArray(0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, cubeVbo[1]);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(cubeNorms), cubeNorms, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
 		glVertexAttribPointer((GLuint)1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		glEnableVertexAttribArray(1);
 
-		glPrimitiveRestartIndex(UCHAR_MAX);
+	/*	glPrimitiveRestartIndex(UCHAR_MAX);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubeVbo[2]);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeIdx), cubeIdx, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeIdx), cubeIdx, GL_STATIC_DRAW);*/
 
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -986,19 +998,17 @@ void main() {\n\
 		//glEnable(GL_PRIMITIVE_RESTART);
 		glBindVertexArray(cubeVao);
 		glUseProgram(cubeProgram);
-		glUniformMatrix4fv(glGetUniformLocation(cubeProgram, "objMat"), 1,
-			GL_FALSE, glm::value_ptr(objMat));
-		glUniformMatrix4fv(glGetUniformLocation(cubeProgram, "mv_Mat"), 1,
-			GL_FALSE, glm::value_ptr(RenderVars::_modelView));
-		glUniformMatrix4fv(glGetUniformLocation(cubeProgram, "mvpMat"), 1,
-			GL_FALSE, glm::value_ptr(RenderVars::_MVP));
-		glUniform4f(glGetUniformLocation(cubeProgram, "color"), 0.1f, 1.f, 1.f,
-			0.f);
+		glUniformMatrix4fv(glGetUniformLocation(cubeProgram, "objMat"), 1, GL_FALSE, glm::value_ptr(objMat));
+		glUniformMatrix4fv(glGetUniformLocation(cubeProgram, "mv_Mat"), 1, GL_FALSE, glm::value_ptr(RenderVars::_modelView));
+		glUniformMatrix4fv(glGetUniformLocation(cubeProgram, "mvpMat"), 1, GL_FALSE, glm::value_ptr(RenderVars::_MVP));
+		glUniform4f(glGetUniformLocation(cubeProgram, "color"), 0.1f, 1.f, 1.f, 0.f);
 		//glDrawElements(GL_TRIANGLE_STRIP, numVerts, GL_UNSIGNED_BYTE, 0);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
 		glUseProgram(0);
 		glBindVertexArray(0);
-		//glDisable(GL_PRIMITIVE_RESTART);
+		//glDisable(GL_PRIMITIVE_RESTART);
 	}
 
 

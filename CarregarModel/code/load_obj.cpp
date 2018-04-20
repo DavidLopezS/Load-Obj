@@ -1,31 +1,35 @@
+// Include standard headers
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+
 #include <glm\gtc\type_ptr.hpp>
 #include <glm\gtc\matrix_transform.hpp>
+
 
 bool loadOBJ(const char * path,
 	std::vector < glm::vec3 > & out_vertices,
 	std::vector < glm::vec2 > & out_uvs,
-	std::vector < glm::vec3 > & out_normals) 
-{
-	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
-	std::vector <glm::vec3 > temp_vertices;
-	std::vector <glm::vec2 > temp_uvs;
-	std::vector <glm::vec3 > temp_normals;
+	std::vector < glm::vec3 > & out_normals
+) {
+	std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
+	std::vector< glm::vec3 > temp_vertices;
+	std::vector< glm::vec2 > temp_uvs;
+	std::vector< glm::vec3 > temp_normals;
 
-	FILE *file = fopen(path, "r");
+	FILE * file = fopen(path, "r");
 	if (file == NULL) {
-		printf("Impossible to open the file! \n");
+		printf("Impossible to open the file !\n");
 		return false;
 	}
 
 	while (1) {
-		char lineHeader[128];
 
+		char lineHeader[128];
+		// read the first word of the line
 		int res = fscanf(file, "%s", lineHeader);
 		if (res == EOF)
-			break;
+			break; // EOF = End Of File. Quit the loop.
 
 		if (strcmp(lineHeader, "v") == 0) {
 			glm::vec3 vertex;
@@ -60,12 +64,33 @@ bool loadOBJ(const char * path,
 			normalIndices.push_back(normalIndex[1]);
 			normalIndices.push_back(normalIndex[2]);
 		}
+
+
+
+
+
+
 	}
+
+	// For each vertex of each triangle
+
 
 	for (unsigned int i = 0; i < vertexIndices.size(); i++) {
 		unsigned int vertexIndex = vertexIndices[i];
 		glm::vec3 vertex = temp_vertices[vertexIndex - 1];
 		out_vertices.push_back(vertex);
+		unsigned int uvindex = uvIndices[i];
+		glm::vec2 uv = temp_uvs[uvindex - 1];
+		out_uvs.push_back(uv);
+		unsigned int normalIndex = normalIndices[i];
+		glm::vec3 normal = temp_normals[normalIndex - 1];
+		out_normals.push_back(normal);
 	}
+
+
+
 	return true;
 }
+
+
+

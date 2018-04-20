@@ -47,6 +47,11 @@ namespace Cube {
 	void drawCube();
 }
 
+namespace Sphere {
+	void setupSphere(glm::vec3 pos, float radius);
+	void cleanupSphere();
+	void drawSphere();
+}
 
 
 
@@ -127,8 +132,8 @@ void GLinit(int width, int height) {
 	Cube::setupCube();
 
 
-
-
+	glm::vec3 Spherepos = glm::vec3(0.f, 10.f, 0.f);
+	Sphere::setupSphere(Spherepos, 2.f);
 
 
 
@@ -140,7 +145,7 @@ void GLcleanup() {
 	Axis::cleanupAxis();*/
 	Cube::cleanupCube();
 
-
+	Sphere::cleanupSphere();
 
 }
 
@@ -159,7 +164,7 @@ void GLrender(double currentTime) {
 	Axis::drawAxis();*/
 	Cube::drawCube();
 
-	
+	Sphere::drawSphere();
 
 	ImGui::Render();
 }
@@ -513,7 +518,7 @@ void drawSphere() {
 	glUniformMatrix4fv(glGetUniformLocation(sphereProgram, "mvpMat"), 1, GL_FALSE, glm::value_ptr(RV::_MVP));
 	glUniformMatrix4fv(glGetUniformLocation(sphereProgram, "mv_Mat"), 1, GL_FALSE, glm::value_ptr(RV::_modelView));
 	glUniformMatrix4fv(glGetUniformLocation(sphereProgram, "projMat"), 1, GL_FALSE, glm::value_ptr(RV::_projection));
-	glUniform4f(glGetUniformLocation(sphereProgram, "color"), 0.6f, 0.1f, 0.1f, 1.f);
+	glUniform4f(glGetUniformLocation(sphereProgram, "color"), 0.5f, 0.6f, 0.0f, 1.f);
 	glUniform1f(glGetUniformLocation(sphereProgram, "radius"), Sphere::radius);
 	glDrawArrays(GL_POINTS, 0, 1);
 

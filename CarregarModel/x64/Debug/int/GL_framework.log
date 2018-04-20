@@ -1,4 +1,4 @@
 ﻿  render.cpp
-c:\users\dlopez\documents\github\load-obj\carregarmodel\code\src\render.cpp(1006): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+c:\users\dlopez\documents\github\load-obj\carregarmodel\code\src\render.cpp(1011): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
   GL_framework.vcxproj -> C:\Users\dlopez\Documents\GitHub\Load-Obj\CarregarModel\x64\Debug\GL_framework.exe
   GL_framework.vcxproj -> C:\Users\dlopez\Documents\GitHub\Load-Obj\CarregarModel\x64\Debug\GL_framework.pdb (Partial PDB)

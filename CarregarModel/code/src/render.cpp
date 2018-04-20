@@ -23,7 +23,8 @@ extern bool loadOBJ(const char * path,
 );
 
 
-
+//Light and SPhere pos
+glm::vec3 Spherepos = glm::vec3(0.f, 10.f, 0.f);
 
 ///////// fw decl
 namespace ImGui {
@@ -132,7 +133,9 @@ void GLinit(int width, int height) {
 	Cube::setupCube();
 
 
-	glm::vec3 Spherepos = glm::vec3(0.f, 10.f, 0.f);
+//	glm::vec3 myçLighPos 2,3,4
+
+
 	Sphere::setupSphere(Spherepos, 2.f);
 
 
@@ -947,6 +950,7 @@ namespace Cube {
 		"#version 330\n\
 in vec4 vert_Normal;\n\
 out vec4 out_Color;\n\
+uniform vec3 lightPos;\n\
 uniform mat4 mv_Mat;\n\
 uniform vec4 color;\n\
 void main() {\n\
@@ -1003,6 +1007,11 @@ void main() {\n\
 		//glEnable(GL_PRIMITIVE_RESTART);
 		glBindVertexArray(cubeVao);
 		glUseProgram(cubeProgram);
+
+
+
+		//give myLightPos to shaders (uniform)
+		glUniform3f(glGetUniformLocation(cubeProgram, "lightPos"), Spherepos.x, Spherepos.y, Spherepos.z);
 		glUniformMatrix4fv(glGetUniformLocation(cubeProgram, "objMat"), 1, GL_FALSE, glm::value_ptr(objMat));
 		glUniformMatrix4fv(glGetUniformLocation(cubeProgram, "mv_Mat"), 1, GL_FALSE, glm::value_ptr(RenderVars::_modelView));
 		glUniformMatrix4fv(glGetUniformLocation(cubeProgram, "mvpMat"), 1, GL_FALSE, glm::value_ptr(RenderVars::_MVP));
